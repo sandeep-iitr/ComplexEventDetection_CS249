@@ -50,10 +50,10 @@ public class SignalProcessing {
         //data = sigNorm;
 
         // DEBUG DUMP FILE GENERATION
-        DataParser.dumpToFile(Arrays.toString(sigNorm),
-                "../run_output/window.csv");
-        DataParser.dumpToFile(Arrays.toString(listIntToArray(rPeaks)),
-                "../run_output/Rpeaks.csv");
+//        DataParser.dumpToFile(Arrays.toString(sigNorm),
+//                "../run_output/window.csv");
+//        DataParser.dumpToFile(Arrays.toString(listIntToArray(rPeaks)),
+//                "../run_output/Rpeaks.csv");
         //DataParser.dumpToFile(Arrays.toString(sigFilt), "../run_output/filt.csv");
         return listIntToArray(rPeaks);
     }
@@ -95,7 +95,7 @@ public class SignalProcessing {
             if (sigNorm[zeroCrossings.get(i)] > THRESHOLD_AMP)
                 rPeaks.add(zeroCrossings.get(i));
         }
-
+       
         // select an R-peak
         pqrstPoints[2] = rPeaks.get(rPeaks.size()/2);
 

@@ -17,9 +17,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.event.globals.Globals;
+
+import beat.analyzer.ProcessWindow;
 import kafka.serializer.StringDecoder;
 
-public class SparkKafka3 {
+public class SparkKafka4 {
 
 	public static void main(String[] args) {
 		
@@ -27,7 +30,7 @@ public class SparkKafka3 {
 		 Logger.getLogger("akka").setLevel(Level.OFF);
 		
 		 SparkConf conf = new SparkConf().setMaster("local[2]").setAppName("Kafka-sandbox");
-		 JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(2));
+		 JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(5));
 		 
 		 //Todo Process pipleine
 		 
@@ -42,29 +45,59 @@ public class SparkKafka3 {
 		 directKafkaStream.foreachRDD(rdd->{
 			 System.out.println("----New RDD with "+rdd.partitions().size()+" Paritions and "+rdd.count()+" records");
 			 
+			
 			 rdd.foreach(record->
 			 {
 				  //record._2 is the json string
 				 //System.out.println(record._2);
 				 
 				 JSONParser parser = new JSONParser();
-				 
 				 JSONObject obj2=(JSONObject)parser.parse(record._2);
-				 System.out.print("Record Num: "+obj2.get("RecordNum"));
-				 System.out.print(" DataType: "+obj2.get("DataType"));
-				 System.out.print(" DataValue: "+obj2.get("DataValueInt"));
-				 System.out.println();
+				 //System.out.print("Record Num: "+obj2.get("RecordNum"));
+				// System.out.print(" DataType: "+obj2.get("DataType"));
+				 //System.out.print(" DataValue: "+obj2.get("DataValueInt"));
+				// System.out.println();
+				 
+			    //Globals.ECG_values[Globals.size] = (double) obj2.get("DataValueDouble");
+				 Globals.ECGlist.add((double) obj2.get("DataValueDouble"));
+				 Globals.size++;
 			 }
 			 
 			 
-			 
 			 );//end foreach
+			 
+			 //process window here:
+			 if(Globals.size>2300)
+			 {
+			 System.out.println("size is:"+Globals.size);
+			 
+			 
+			 ProcessWindow pw=new ProcessWindow();
+			 pw.process();
+			 System.out.println("array length:"+Globals.ECG_values.length);
+			 
+			 Globals.ECGlist.clear();
+			 Globals.size=0;
+			 
+			 }
+			 
+			 else
+			 {
+				 Globals.size=0;
+				 Globals.ECGlist.clear();
+			 }
+			 //end process window here
 			 
 					
 			 
 		 });//end directKafkaStream
 		 
 		 //end Todo Process pipeline
+		 
+		 
+		
+		 
+		 
 		 
 		 jssc.start();
 		 
