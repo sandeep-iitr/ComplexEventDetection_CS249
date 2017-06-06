@@ -14,32 +14,6 @@ public class ProcessWindow {
     public void process() {
 	// write your code here
         int WINDOW_SIZE = Globals.size;//2500;
-        //String path = "Data/twa01.csv";
-        //System.out.println("Processing: " + path);
-        //List<Double> data = DataParser.ReadCSV(path);
-       // double[] da = new double[data.size()];
-        //for (int i = 0; i < da.length; i++){
-        //    da[i] = data.get(i);
-       // }
-        /* Read ABP data*/
-        //String pathABP = "Data/rec_1.csv";
-       // System.out.println("Processing: " + pathABP);
-      //  List<Double> dataABP = DataParser.ReadCSV_ABP(pathABP);
-       // double[] daABP = new double[dataABP.size()];
-       // for (int i = 0; i < daABP.length; i++){
-     //       daABP[i] = dataABP.get(i);
-//        }
-
-        // create processing windows
-       // List<double[]> windows = SignalProcessing.makeWindow(da, WINDOW_SIZE);
-        
-        //List<double[]> windows = SignalProcessing.makeWindow(Globals.ECG_values, Globals.size);
-       // List<double[]> windowsABP = SignalProcessing.makeWindow(daABP, WINDOW_SIZE);
-        //List<HashMap> features = new ArrayList<>();
-        //for (int ind_win=0; ind_win<windows.size(); ind_win++) {
-         //   System.out.println("Window #: " + ind_win);
-            // find R-peaks
-       //     System.out.println("ind_win :"+ind_win);
         
            Globals.ECG_values = SignalProcessing.listDoubleToArray(Globals.ECGlist);
         
@@ -64,6 +38,27 @@ public class ProcessWindow {
             windowFeatures.put("ECG_T_X", (double) (pqrstPoints[4]));
             windowFeatures.put("ECG_T_Y", wind[pqrstPoints[4]]);
 
+         // TODO: merge with server code
+            // check validity of the window
+            if (Analysis.checkECGFeatures(windowFeatures))
+            {
+                // measure HR
+                double windowHR = Analysis.calcHR(rPeaks);
+                // measure HRV
+                double windowHRV = Analysis.calcHRV(rPeaks);
+                //measure stress
+                double stressIdx = Analysis.calcStress(windowHRV);
+                
+                System.out.println("Stress Idx: " + stressIdx);
+                
+                // predict risk
+                double windowRisk = Analysis.predictRisk(windowFeatures);
+                System.out.println(" HR: " + windowHR + " HRV: " + windowHRV + " Risk: " + windowRisk);
+            }
+            else
+                System.out.println("Invalid Window, Skipped");
+            
+            /*
             //features.add(windowFeatures);
             // measure HRV
             double windowHRV = Analysis.calcHRV(rPeaks);
@@ -72,6 +67,7 @@ public class ProcessWindow {
             double windowRisk = Analysis.predictRisk(windowFeatures);
             System.out.println("HRV: " + windowHRV + " Risk: " + windowRisk);
             int a=0;
+            */
        // }
         //DataParser.dumpToFile(Arrays.toString(windows.get(0)), "../run_output/window.csv");
         //DataParser.dumpToFile(Arrays.toString(res), "../run_output/Rpeaks.csv");

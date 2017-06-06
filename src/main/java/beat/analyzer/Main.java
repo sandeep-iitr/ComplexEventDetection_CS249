@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
         int WINDOW_SIZE = 2500;
-        String path = "Data/twa01.csv";
+        String path = "Data/twa06.csv";
         System.out.println("Processing: " + path);
         List<Double> data = DataParser.ReadCSV(path);
         double[] da = new double[data.size()];
@@ -57,13 +57,36 @@ public class Main {
             windowFeatures.put("ECG_T_Y", wind[pqrstPoints[4]]);
 
             features.add(windowFeatures);
+            
+         // TODO: merge with server code
+            // check validity of the window
+            if (Analysis.checkECGFeatures(windowFeatures))
+            {
+                // measure HR
+                double windowHR = Analysis.calcHR(rPeaks);
+                // measure HRV
+                double windowHRV = Analysis.calcHRV(rPeaks);
+                //measure stress
+                double stressIdx = Analysis.calcStress(windowHRV);
+                
+                System.out.println("Stress Idx: " + stressIdx);
+                
+                // predict risk
+                double windowRisk = Analysis.predictRisk(windowFeatures);
+                System.out.println(" HR: " + windowHR + " HRV: " + windowHRV + " Risk: " + windowRisk);
+            }
+            else
+                System.out.println("Invalid Window, Skipped");
+            
+            /*
             // measure HRV
             double windowHRV = Analysis.calcHRV(rPeaks);
 
             // predict risk
             double windowRisk = Analysis.predictRisk(windowFeatures);
             System.out.println("HRV: " + windowHRV + " Risk: " + windowRisk);
-            int a=0;
+            */
+           
         }
         //DataParser.dumpToFile(Arrays.toString(windows.get(0)), "../run_output/window.csv");
         //DataParser.dumpToFile(Arrays.toString(res), "../run_output/Rpeaks.csv");
