@@ -1,3 +1,11 @@
+/*
+ * Contributors:
+ * Sandeep Singh Sandha, Mohammad Kachuee and Sajad Darabi
+ * Project: CS249
+ * University of California, Los Angeles
+ * Date: 21 June, 2017
+ */
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,7 +38,7 @@ import beat.analyzer.SignalProcessing;
 import kafka.serializer.StringDecoder;
 import scala.Tuple2;
 
-public class SparkKafka6 {
+public class HealthAnalyticsMain {
 
 	public static void main(String[] args) {
 		
@@ -41,7 +49,6 @@ public class SparkKafka6 {
 		 JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(5));
 		 
 		 //Todo Process pipleine
-		 
 		 
 		 Map<String, String> kafkaParams = new HashMap<>();
 		 kafkaParams.put("bootstrap.servers", "localhost:9092");
@@ -54,22 +61,6 @@ public class SparkKafka6 {
 			 
 			 
 			 System.out.println("----New RDD with "+rdd.partitions().size()+" Paritions and "+rdd.count()+" records");
-			 
-			 /*
-			 rdd.foreach(record->
-			 {
-				  //record._2 is the json string
-				 System.out.println("First Object:"+record._1);
-				 System.out.println("Second Object"+record._2);
-				 
-				 //System.out.print("Record Num: "+obj2.get("RecordNum"));
-				// System.out.print(" DataType: "+obj2.get("DataType"));
-				 //System.out.print(" DataValue: "+obj2.get("DataValueInt"));
-				// System.out.println();
-				 
-			   
-			 });//end foreach
-			 */
 			 
 			 JavaRDD<int []> rPeaksRDD = rdd.map(new Function<Tuple2<String,String>, int[]>() {
 			
@@ -84,7 +75,7 @@ public class SparkKafka6 {
 						
 						 Globals.size=0;
 						 
-					   // System.out.println("rPeaksRDD in Map:"+arg0._2.length());
+					  
 					
 					    JSONParser parser = new JSONParser();
 					    JSONArray jsonarray=(JSONArray)parser.parse(arg0._2);
@@ -160,44 +151,8 @@ public class SparkKafka6 {
 				  
 			 });
 			 
-			 /*
-			 rPeaksRDD.foreach(record->
-			 {
-				  //record._2 is the json string
-				 int[] rpeaks=record;
-				 System.out.print("rPeaksRDD:");
-				 
-				 for(int i=0;i<rpeaks.length;i++)
-				 {
-					 System.out.print(rpeaks[i]+" ");
-				 }
-				 System.out.println();
-			 });//end foreach
-			 */
+			
 			 
-			 /*
-			 pqrstPointsRDD.foreach(record->
-			 {
-				  //record._2 is the json string
-				 int[] rpeaks=record;
-				 System.out.print("pqrstPointsRDD:");
-				 
-				 for(int i=0;i<rpeaks.length;i++)
-				 {
-					 System.out.print(rpeaks[i]+" ");
-				 }
-				 System.out.println();
-			 });//end foreach
-			 */
-			 
-			 /*
-			  *  // measure HR
-                double windowHR = Analysis.calcHR(rPeaks);
-                // measure HRV
-                double windowHRV = Analysis.calcHRV(rPeaks);
-                //measure stress
-                double stressIdx = Analysis.calcStress(windowHRV);
-			  */
 			 
 			 JavaRDD<Double> windowHRRDD = rPeaksRDD.map(new Function<int[], Double>() {
 
@@ -269,7 +224,7 @@ public class SparkKafka6 {
 						}
 					   });
 				
-				
+				/*
 				 windowHRRDD.foreach(record->
 				 {
 					  //record._2 is the json string
@@ -285,13 +240,13 @@ public class SparkKafka6 {
 					 System.out.println(" HRV :"+record);
 					
 				 });//end foreach
-			
+			*/
 				 
 				 stressIdxRDD.foreach(record->
 					 {
 						  //record._2 is the json string
 						
-						 System.out.println("Stress Idx:"+record);
+						 System.out.println("Stress Index is:"+record);
 						
 					 });//end foreach
 					 
@@ -330,53 +285,7 @@ public class SparkKafka6 {
 	                
 				 /*End Predicting the Heart Risk*/
 				 
-			/*
-			 rdd.foreach(record->
-			 {
-				  //record._2 is the json string
-				 //System.out.println(record._2);
-				 
-				 JSONParser parser = new JSONParser();
-				 JSONObject obj2=(JSONObject)parser.parse(record._2);
-				 //System.out.print("Record Num: "+obj2.get("RecordNum"));
-				// System.out.print(" DataType: "+obj2.get("DataType"));
-				 //System.out.print(" DataValue: "+obj2.get("DataValueInt"));
-				// System.out.println();
-				 
-			    //Globals.ECG_values[Globals.size] = (double) obj2.get("DataValueDouble");
-				 Globals.ECGlist.add((double) obj2.get("DataValueDouble"));
-				 Globals.size++;
-			 }
-			 
-			 
-			 );//end foreach
-			 
-			 */
 			
-			 
-			 /*
-			 //process window here:
-			 if(Globals.size>2300)
-			 {
-			 System.out.println("size is:"+Globals.size);
-			 
-			 
-			 ProcessWindow pw=new ProcessWindow();
-			 pw.process();
-			 System.out.println("array length:"+Globals.ECG_values.length);
-			 
-			 Globals.ECGlist.clear();
-			 Globals.size=0;
-			 
-			 }
-			 
-			 else
-			 {
-				 Globals.size=0;
-				 Globals.ECGlist.clear();
-			 }
-			 //end process window here
-			 */
 					
 			 
 		 });//end directKafkaStream
