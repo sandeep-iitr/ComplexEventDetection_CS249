@@ -23,7 +23,7 @@ How to run:
 
 
 # System Design
-The system is designed using Kafka and Spark. Spark streaming is used to receive the data from Kafka topics. Spark streaming\footnote{https://spark.apache.org/streaming/} is also used to run the heart failure risk and stress index prediction over the windows of data streams.
+The system is designed using Kafka and Spark. Spark streaming is used to receive the data from Kafka topics. [Spark streaming](https://spark.apache.org/streaming/) is also used to run the heart failure risk and stress index prediction over the windows of data streams.
 
 ## Apache Kafka
 Apache Kafka is a streaming platform which enables user to publish data and also subscribe to different streams of records. Kafka stores the streams in a fault tolerant way. Kafka is used to build reliable real-time streaming data pipelines. Kafka runs as a cluster and have concept of topics or feed name to which records are published. In our current system abstraction, every user is publishing it data to a particular topic designated for the stream. Each topic internally maintains all the records for the configurable retention period. This capability can be used for the health conditions which requires to use the past data. 
