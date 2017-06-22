@@ -1,4 +1,4 @@
-# Complex Event Processing of Health Data in Real-time using Kafka and Spark
+# Complex Event Processing of Health Data in Real-time using Kafka and Spark to Predict Heart Failure Risk and Stress
 ## UCLA CS 249: Current Topics in Data-structures 
 
 Contributors:
