@@ -3,8 +3,8 @@
 
 Contributors:
 - [Sandeep Singh Sandha](https://sites.google.com/view/sandeep-/home)
-- Mohammad Kachuee
-- Sajad Darabi
+- [Mohammad Kachuee](http://web.cs.ucla.edu/~mkachuee/)
+- [Sajad Darabi](http://web.cs.ucla.edu/~sajad.darabi/)
 
 In this project our goal was to develop a scalable system which can do real-time analytics of different health conditions. Different health conditions can be regarded as the complex events and thus this concept can be extended to other use cases easily.
 Large number of users should be able to send the health data in real-time and along with receiving back the feedback and results. 
