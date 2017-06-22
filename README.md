@@ -8,7 +8,8 @@ Contributors:
 
 In this project our goal was to develop a scalable system which can do real-time analytics of different health conditions. Different health conditions can be regarded as the complex events and thus this concept can be extended to other use cases easily.
 Large number of users should be able to send the health data in real-time and along with receiving back the feedback and results. 
-Keeping the requirements in mind we used Kafka and Spark to develop our system. Multiple users are like Kafka producers sending data in real-time. Spark streaming is used to process data of different window sizes to analyze the health conditions. In our system we have developed and tested the heart attack risk prediction and stress prediction as our sample complex events. We have simulated and tested our system with multiple health datasets.
+Keeping the requirements in mind we used Kafka and Spark to develop our system. Multiple users are like Kafka producers sending data in real-time. Spark streaming is used to process data of different window sizes to analyze the health conditions. In our system we have developed and tested the heart attack risk prediction and stress prediction as our sample complex events. We have simulated and tested our system with multiple health datasets. The project report is available [here](https://github.com/sandeep-iitr/ComplexEventDetection_CS249/blob/master/complex-event-processing.pdf).
+
 
 Dependencies:
 [Apache Kafka](https://kafka.apache.org/), [Apache Spark](https://spark.apache.org/), Java, [Apache Maven](https://maven.apache.org/), [Zookeeper](https://zookeeper.apache.org/).
